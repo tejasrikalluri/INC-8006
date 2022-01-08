@@ -1,0 +1,76 @@
+.trouble {
+    margin-left: 41%;
+    padding-right: 5px;
+}
+
+.error_div {
+    color: red;
+    margin-bottom: 3px !important;
+}
+
+.first_page {
+    width: 60% !important;
+}
+
+.prefix {
+    width: fit-content !important;
+}
+
+.ticket_field {
+    width: 56% !important;
+}
+
+.addParamBlock {
+    display: block;
+}
+
+.ml12 {
+    margin-left: -12px;
+}
+
+.ml3 {
+    margin-left: 9px;
+}
+
+.block {
+    display: flex;
+}
+
+.red {
+    color: red;
+}
+
+.align {
+    margin-left: 5px;
+    margin-top: 9px;
+}
+
+.mt36 {
+    display: inline-block;
+    margin-top: 36px;
+}
+
+.mt5 {
+    margin-top: 5%;
+}
+
+.ml10 {
+    margin-left: 10%;
+}
+.mt12{
+    margin-top: 12%;
+}
+hr {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 95%;
+    background-color: #47473e;
+    height: 1px;
+    margin-top: 3% !important;
+}
+
+hr.dashed {
+    border-top: 3px dashed rgb(197, 117, 117);
+    background-color: white;
+}

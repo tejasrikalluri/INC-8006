@@ -1,0 +1,212 @@
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://static.freshdev.io/fdk/2.0/assets/fresh_client.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="module" src="https://unpkg.com/@freshworks/crayons/dist/crayons/crayons.esm.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.2.1/superagent.js"></script>
+    <script nomodule src="https://unpkg.com/@freshworks/crayons/dist/crayons/crayons.js">
+    </script>
+    <script src="./assets/iparams.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://static.freshdev.io/fdk/2.0/assets/freshdesk.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/iparams.css">
+
+</head>
+
+<body>
+    <div class="authentication align">
+        <fw-input label="Freshdesk Domain" id="domain" class="first_page" required clear-input>
+        </fw-input>
+        <fw-input label="Freshdesk API key" id="apiKey" class="first_page" required clear-input>
+        </fw-input>
+        <span class="trouble"> <a
+                href="https://support.freshdesk.com/support/solutions/articles/215517-how-to-find-your-api-key"
+                target="_blank">Trouble
+                finding
+                API
+                key?</a></span>
+        <div class="error_div"></div>
+        <div>
+            <fw-button color="primary" id="authBtn"> Authenticate</fw-button>
+        </div>
+    </div>
+    <div class="next_page align">
+        <label>Configure URL ID, URL and Parameters:</label>
+        <div id="addUrlConfig">
+            <div id=urlConfig class="urlConfig">
+                <div id="first" class="col-sm-12">
+                    <div class="col-sm-3" id="linkIDBlock">
+                        <label class="block">URL ID:</label>
+                        <label class="col-sm-2 block linkID" id="linkID">1</label>
+                    </div>
+                    <div class="col-sm-5">
+                        <fw-input label="URL" id="urlLink" class="urlLink"></fw-input>
+                    </div>
+                </div>
+                <div id="second" class="second">
+                    <div id="addParamBlock" class=addParamBlock class="col-sm-12">
+                        <div class="col-sm-3">
+                            <fw-input class="prefix" id="prefix" label="Parameter prefix"></fw-input>
+                        </div>
+                        <div class="col-sm-5" id="select">
+                            <label class="ml3">Ticket field</label>
+                            <select class="form-control ticket_field ml3" id="ticket_field"></select>
+                        </div>
+                        <div class="col-sm-4">
+                            <a class="mt36" id="addParam">+Add URL parameter</a>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </div>
+
+        <div>
+            <a id=addLink>+Add URL Data</a>
+        </div>
+        <div id="ticketConfig" class="mt5">
+            <label>Configure Ticket Type, Status and associated URL ID (separated by comma):</label>
+            <div id="addTicketConfig">
+                <div class="col-sm-12 ticketConfig" id="ticketConfig">
+                    <div class="col-sm-3"><label class="">Type</label>
+                        <select class="form-control type" id="type"></select>
+                    </div>
+                    <div class="col-sm-3"><label class="">Status</label>
+                        <select class="form-control status" id="status"></select>
+                    </div>
+                    <div class="col-sm-3">
+                        <fw-textarea cols=37 rows=2 label="URL ID(s)" class="url_ids mt12" id="url_ids" state="normal">
+                        </fw-textarea>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <a id=addTktConfig>+Add Ticket Config</a>
+            </div>
+        </div>
+        <div class="red" id="urlConfigErr"></div>
+    </div>
+
+    <script type="text/javascript">
+        var updateConfigs;
+        function postConfigs() {
+            var domain = $("#domain").val();
+            var api_key = $("#apiKey").val();
+            var URLConfigMap = [], ticketConfig = [];
+            saveURLConfig(URLConfigMap);
+            $('.ticketConfig').each(function () {
+                var obj = {};
+                var type = $(this).find('select.type').val(), status = $(this).find('select.status').val(),
+                    url_ids = $(this).find('fw-textarea.url_ids').val();
+                if (type !== "--Select--" && status !== '--Select--' && url_ids !== '') {
+                    obj["type"] = type;
+                    obj["status"] = parseInt(status);
+                    obj["url_ids"] = url_ids;
+                }
+                ticketConfig.push(obj);
+            });
+            return {
+                __meta: {
+                    secure: ["api_key"]
+                },
+                domain: domain,
+                api_key: api_key, URLConfigMap: URLConfigMap, ticketConfig: ticketConfig
+            };
+        }
+        function getConfigs(configs) {
+            console.log(configs)
+            updateConfigs = configs;
+            $("#domain").val(configs.domain);
+            $("#apiKey").val(configs.api_key);
+        }
+        function saveURLConfig(URLConfigMap) {
+            $('.urlConfig').each(function () {
+                var obj = {
+                };
+                var URLID = $(this).find('label.linkID').text(), URL = $(this).find('fw-input.urlLink').val();
+                var prefixArr = [], fieldArr = []
+                if (URLID !== "" && URL !== '') {
+                    obj["URLID"] = parseInt(URLID);
+                    obj["URL"] = URL;
+                    $(this).find('div.addParamBlock').each(function (i) {
+                        if ($(this).find('fw-input.prefix').val() !== "" && $(this).find('select.ticket_field').val() !== "--Select--") {
+                            prefixArr.push($(this).find('fw-input.prefix').val());
+                            fieldArr.push($(this).find('select.ticket_field').val());
+                        }
+                    });
+                    obj["params"] = prefixArr;
+                    obj["fields"] = fieldArr;
+                }
+                URLConfigMap.push(obj);
+            });
+        }
+        function validate() {
+            var btnText = $("#authBtn").text(), failedCheck = true;
+            if ($(".authentication").is(":visible") && btnText !== "Authenticated") {
+                $(".error_div").html("Please click Authenticate button for further installation");
+                console.log("failed")
+                failedCheck = false;
+            }
+            else if ($(".next_page").is(":visible")) {
+                var linkIDArr = [];
+                $('.urlConfig').each(function () {
+                    var URL = $(this).find('fw-input.urlLink').val(), URLID = $(this).find('label.linkID').text();
+                    console.log(URL)
+                    if (URL === '') {
+                        $("#urlConfigErr").html("Please configure or delete the configurations");
+                        console.log("failed")
+                        failedCheck = false;
+                    } else {
+                        console.log("else")
+                        linkIDArr.push(URLID);
+                        $(this).find('div.addParamBlock').each(function (i) {
+                            console.log($(this).find('fw-input.prefix').val(), $(this).find('select.ticket_field').val())
+                            if ($(this).find('fw-input.prefix').val() === "" || $(this).find('select.ticket_field').val() === null) {
+                                $("#urlConfigErr").html("Please configure the parameters");
+                                console.log("failed")
+                                failedCheck = false;
+                            }
+                        });
+                    }
+                });
+                $('.ticketConfig').each(function () {
+                    var type = $(this).find('select.type').val(), status = $(this).find('select.status').val(),
+                        url_ids = $(this).find('fw-textarea.url_ids').val();
+                    console.log(type === null || type === "" || status === "" || status === null || url_ids === '')
+                    console.log(type, status, url_ids)
+                    if (type === null || type === "" || status === "" || status === null || url_ids === '') {
+                        $("#urlConfigErr").html("Please configure or delete the configurations");
+                        failedCheck = false;
+                    }
+                    if (type !== null && type !== "" && status !== "" && status !== null && url_ids !== '') {
+                        console.log("passed..")
+                        var url_ids_arr = url_ids.split(',');
+                        let allFounded = url_ids_arr.every(ai => linkIDArr.includes(ai));
+                        console.log(url_ids_arr)
+                        console.log("allfounded=> ", allFounded)
+                        if (!allFounded) {
+                            $("#urlConfigErr").html("Please fill existing URL ID(s)");
+                            failedCheck = false;
+                        }
+                    }
+                });
+
+            }
+            console.log(failedCheck)
+            if (failedCheck) {
+                $("#urlConfigErr").html("");
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+</body>
+
+</html>

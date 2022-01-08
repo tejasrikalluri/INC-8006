@@ -1,0 +1,28 @@
+{
+  "platform-version": "2.2",
+  "product": {
+    "freshdesk": {
+      "location": {
+        "ticket_top_navigation": {
+          "url": "index.html",
+          "icon": "styles/images/icon.svg"
+        }
+      },
+      "functions": {
+        "fetchTicketFields": {
+          "timeout": 10
+        }
+      }
+    }
+  },
+  "whitelisted-domains": [
+    "https://*.freshdesk.com"
+  ],
+  "engines": {
+    "node": "12.22.6",
+    "fdk": "7.0.0"
+  },
+  "dependencies": {
+    "lodash": "4.17.20"
+  }
+}
