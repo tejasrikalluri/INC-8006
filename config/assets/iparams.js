@@ -23,6 +23,7 @@ app.initialized().then(function (client) {
         } else buttonEnable();
     });
     $(document).on('change', 'select,fw-textarea,fw-input', function () {
+        console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
         $("#urlConfigErr").html("");
     });
     $(document).on('click', '#addParam,.addParam', function () {
