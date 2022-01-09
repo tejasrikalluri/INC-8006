@@ -302,7 +302,7 @@ function appendTicketUi(fakeId, i, resp) {
     <div class="col-sm-3"><label class="">Type</label>
         <select class="form-control type" id="type_${fakeId}"></select>
     </div>
-    <div class="col-sm-2"><label class="">Status</label>
+    <div class="col-sm-3"><label class="">Status</label>
         <select class="form-control status" id="status_${fakeId}"></select>
     </div>
     <div class="col-sm-3">
