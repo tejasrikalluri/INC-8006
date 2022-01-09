@@ -28,9 +28,9 @@ function getClient(_client) {
                 }
             });
             if (!matchFlag)
-                $("#errorDisplay").html("Ticket type/status doesn't match with settings page configuration.");
+                $("#errorDisplay").html("No URLs configured for current Ticket Type & Status");
         } else {
-            $("#errorDisplay").html("TYPE not configured, Please choose type for this ticket.");
+            $("#errorDisplay").html("No Type configured for the current ticket");
         }
 
     }
