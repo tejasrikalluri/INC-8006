@@ -23,6 +23,7 @@ app.initialized().then(function (client) {
         } else buttonEnable();
     });
     $(document).on('change', 'select,fw-textarea,fw-input', function () {
+        console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
         $("#urlConfigErr").html("");
     });
     $(document).on('click', '#addParam,.addParam', function () {
@@ -64,7 +65,7 @@ app.initialized().then(function (client) {
         <div class="col-sm-3"><label class="">Type</label>
             <select class="form-control type" id="type_${typeCount}"></select>
         </div>
-        <div class="col-sm-2"><label class="">Status</label>
+        <div class="col-sm-3"><label class="">Status</label>
             <select class="form-control status" id="status_${typeCount}"></select>
         </div>
         <div class="col-sm-3">
@@ -233,7 +234,9 @@ function appendTicketFieldsOptions(resp) {
         if (length === 0)
             $(this).html(select);
     });
-
+    $(".ticket_field option[value='cf_fsm_customer_signature']").each(function() {
+        $(this).remove();
+    });
 }
 function removeAttrFn(id) {
     $("#" + id).removeAttr("state-text");
@@ -301,7 +304,7 @@ function appendTicketUi(fakeId, i, resp) {
     <div class="col-sm-3"><label class="">Type</label>
         <select class="form-control type" id="type_${fakeId}"></select>
     </div>
-    <div class="col-sm-2"><label class="">Status</label>
+    <div class="col-sm-3"><label class="">Status</label>
         <select class="form-control status" id="status_${fakeId}"></select>
     </div>
     <div class="col-sm-3">

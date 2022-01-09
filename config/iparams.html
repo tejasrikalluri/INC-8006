@@ -149,7 +149,7 @@
         function validate() {
             var btnText = $("#authBtn").text(), failedCheck = true;
             if ($(".authentication").is(":visible") && btnText !== "Authenticated") {
-                $(".error_div").html("Please click Authenticate button for further installation");
+                $(".error_div").text("Please click Authenticate button for further installation");
                 console.log("failed")
                 failedCheck = false;
             }
@@ -159,7 +159,7 @@
                     var URL = $(this).find('fw-input.urlLink').val(), URLID = $(this).find('label.linkID').text();
                     console.log(URL)
                     if (URL === '') {
-                        $("#urlConfigErr").html("Please configure or delete the configurations");
+                        $("#urlConfigErr").text("Please configure or delete the configurations");
                         console.log("failed")
                         failedCheck = false;
                     } else {
@@ -168,7 +168,7 @@
                         $(this).find('div.addParamBlock').each(function (i) {
                             console.log($(this).find('fw-input.prefix').val(), $(this).find('select.ticket_field').val())
                             if ($(this).find('fw-input.prefix').val() === "" || $(this).find('select.ticket_field').val() === null) {
-                                $("#urlConfigErr").html("Please configure the parameters");
+                                $("#urlConfigErr").text("Please configure the parameters");
                                 console.log("failed")
                                 failedCheck = false;
                             }
@@ -178,20 +178,19 @@
                 $('.ticketConfig').each(function () {
                     var type = $(this).find('select.type').val(), status = $(this).find('select.status').val(),
                         url_ids = $(this).find('fw-textarea.url_ids').val();
-                    console.log(type === null || type === "" || status === "" || status === null || url_ids === '')
                     console.log(type, status, url_ids)
-                    if (type === null || type === "" || status === "" || status === null || url_ids === '') {
-                        $("#urlConfigErr").html("Please configure or delete the configurations");
+                    if (type === null || status === null || url_ids === '') {
+                        $("#urlConfigErr").text("Please configure or delete the configurations");
                         failedCheck = false;
                     }
-                    if (type !== null && type !== "" && status !== "" && status !== null && url_ids !== '') {
+                    if (type !== null && status !== null && url_ids !== '') {
                         console.log("passed..")
                         var url_ids_arr = url_ids.split(',');
                         let allFounded = url_ids_arr.every(ai => linkIDArr.includes(ai));
                         console.log(url_ids_arr)
                         console.log("allfounded=> ", allFounded)
                         if (!allFounded) {
-                            $("#urlConfigErr").html("Please fill existing URL ID(s)");
+                            $("#urlConfigErr").text("Please fill existing URL ID(s)");
                             failedCheck = false;
                         }
                     }
@@ -200,7 +199,7 @@
             }
             console.log(failedCheck)
             if (failedCheck) {
-                $("#urlConfigErr").html("");
+                // $("#urlConfigErr").text("");
                 return true;
             } else {
                 return false;
