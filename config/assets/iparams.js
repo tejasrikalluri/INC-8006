@@ -234,7 +234,9 @@ function appendTicketFieldsOptions(resp) {
         if (length === 0)
             $(this).html(select);
     });
-
+    $(".ticket_field option[value='cf_fsm_customer_signature']").each(function() {
+        $(this).remove();
+    });
 }
 function removeAttrFn(id) {
     $("#" + id).removeAttr("state-text");

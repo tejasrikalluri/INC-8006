@@ -43,14 +43,14 @@ function getClient(_client) {
             $.each(url_ids.split(","), function (key1, value1) {
                 if (key + 1 == value1) {
                     console.log(value)
-                    formDefaultFields(ticketData, value,html);
+                    formDefaultFields(ticketData, value, html);
                 }
             });
         });
 
     }
 }
-function formDefaultFields(ticketData, value,html) {
+function formDefaultFields(ticketData, value, html) {
     var paramUrl = '';
     console.log(value.fields.join("&"))
     console.log(ticketData["group_id"])
@@ -79,6 +79,10 @@ function formDefaultFields(ticketData, value,html) {
                     } else if (value2 === "product") {
                         paramUrl += value1 + "=" + ticketData["product_id"];
 
+                    }
+                    else if (value2 === "company") {
+                        paramUrl += value1 + "=" + ticketData["company_id"];
+
                     } else if (ticketData[value2] === undefined) {
                         console.log(ticketData.customFields[value2])
                         paramUrl += value1 + "=" + ticketData.customFields[value2];
@@ -92,7 +96,7 @@ function formDefaultFields(ticketData, value,html) {
                         console.log(ticketData["type"] + "&")
                         paramUrl += value1 + "=" + ticketData["type"] + "&";
                     } else if (value2 === "group") {
-                        paramUrl += value1 + "=" + ticketData["group_id"];
+                        paramUrl += value1 + "=" + ticketData["group_id"] + "&";
                     } else if (value2 === "agent") {
                         paramUrl += value1 + "=" + ticketData["responder_id"] + "&";
 
@@ -108,11 +112,12 @@ function formDefaultFields(ticketData, value,html) {
                     } else if (value2 === "product") {
                         paramUrl += value1 + "=" + ticketData["product_id"] + "&";
 
+                    } else if (value2 === "company") {
+                        paramUrl += value1 + "=" + ticketData["company_id"] + "&";
+
                     } else if (ticketData[value2] === undefined) {
-                        console.log(ticketData.customFields[value2] + "&")
                         paramUrl += value1 + "=" + ticketData.customFields[value2] + "&";
                     } else {
-                        console.log(ticketData[value2] + "&")
                         paramUrl += value1 + "=" + ticketData[value2] + "&";
 
                     }
